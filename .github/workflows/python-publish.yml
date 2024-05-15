@@ -20,6 +20,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    environment: publishing
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
