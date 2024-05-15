@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+numpy = "*"
+requests = "*"
+twine = "*"
+pandas = "*"
+aiohttp = "*"
+gprofiler-official = "*"
+
+[dev-packages]
+"flake8" = "*"
+pytest = "*"
+ipython = "*"
+mypy = "*"
+sphinx = "*"
+sphinx-rtd-theme = "*"
+
+[requires]
