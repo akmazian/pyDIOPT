@@ -2,9 +2,9 @@ def citation() -> None:
     print("Please cite the original DIOPT papers")
     print(
         """
-        Yanhui Hu, Ian Flockhart, Arunachalam Vinayagam, Clemens Bergwitz, Bonnie Berger, Norbert Perrimon, and Stephanie E Mohr. 2011. “An integrative approach to ortholog prediction for disease-focused and other functional studies.” BMC Bioinformatics, 12, Pp. 357.
-        
-        Yanhui Hu, Aram Comjean, Jonathan Rodiger, Yifang Liu, Yue Gao, Verena Chung, Jonathan Zirin, Norbert Perrimon, and Stephanie E Mohr. 2020. “FlyRNAi.org-the database of the Drosophila RNAi screening center and transgenic RNAi project: 2021 update.” Nucleic Acids Res.
+Yanhui Hu, Ian Flockhart, Arunachalam Vinayagam, Clemens Bergwitz, Bonnie Berger, Norbert Perrimon, and Stephanie E Mohr. 2011. “An integrative approach to ortholog prediction for disease-focused and other functional studies.” BMC Bioinformatics, 12, Pp. 357.
+
+Yanhui Hu, Aram Comjean, Jonathan Rodiger, Yifang Liu, Yue Gao, Verena Chung, Jonathan Zirin, Norbert Perrimon, and Stephanie E Mohr. 2020. “FlyRNAi.org-the database of the Drosophila RNAi screening center and transgenic RNAi project: 2021 update.” Nucleic Acids Res.
         """
     )
     print()
