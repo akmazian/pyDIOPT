@@ -2,6 +2,12 @@
 
 This is the unofficial, opinionated DIOPT python wrapper for the [DIOPT](https://www.flyrnai.org/cgi-bin/DRSC_orthologs.pl) ortholog finder.
 
+## Installation
+
+```shell
+pip install pyDIOPT
+```
+
 ## Example
 
 A couple examples of how to run the wrapper. The standard output is organized into pd.DataFrame for easier downstream manipulations and whatever you want (or can) do with ortholog data (?).
