@@ -19,16 +19,16 @@ class DIOPTRelease:
     Util class for fetching orthologs.
     """
 
-    gp = GProfiler(return_dataframe=True)
+    _gp = GProfiler(return_dataframe=True)
 
     def __init__(
         self, version: Literal["v8", "v9"] = "v8", input_species: str | int = "human"
     ) -> None:
         if version not in ["v8", "v9"]:
             if version in [8, 9]:
-                self.version = "v" + version
+                self.version = f"v{version}"
             else:
-                raise TypeError("The")
+                raise TypeError("The version annot be parsed. Please indicate whether v8 or v9 is to be used")
         else:
             if version == "v9":
                 print(
@@ -36,7 +36,12 @@ class DIOPTRelease:
                 )
             self.version = version
 
-        self.input_species = Species.parse_species(input_species)
+        try:
+            self.input_species = Species.parse_species(input_species, error=True)
+        except:
+            raise ValueError(
+                "The input species cannot be parsed. Refer to pyDIOPT.Species.available() for a complete list of supported species."
+            )
 
     def fetch(
         self,
@@ -78,7 +83,7 @@ class DIOPTRelease:
             filter if filter else "none",
         )
 
-        genes = self.convert_to_entrez_acc(np.array(genes).tolist())
+        genes = self.convert_to_entrez_acc(genes)
 
         async def _fetch(session, url):
             async with session.get(url) as response:
@@ -104,10 +109,14 @@ class DIOPTRelease:
         chunks = []
 
         for entry in results:
-            gene_details = entry["search_details"]["gene_details"][0]
+            try:
+                gene_details = entry["search_details"]["gene_details"][0]
+            except:
+                print(
+                    f'entry["search_details"]["gene_details"] is {entry["search_details"]["gene_details"]}. entry is {entry}'
+                )
 
             if not entry["results"]:
-                print(entry)
                 unmatched.append(gene_details["symbol"])
                 continue
 
@@ -137,9 +146,13 @@ class DIOPTRelease:
                 chunks.append(chunk)
 
         if unmatched:
-            print(f"Some of the queries are returned unmatched:\n{unmatched}")
+            print(
+                f"{np.ceil(len(unmatched) / len(genes) * 100)}% of the queries are returned unmatched:\n{unmatched}"
+            )
 
-        return pd.concat(chunks, axis=0, ignore_index=True)
+        return (
+            pd.concat(chunks, axis=0, ignore_index=True) if chunks else pd.DataFrame()
+        )
 
     def convert_to_entrez_acc(self, genes: Sequence[str]) -> np.array:
         """
@@ -150,17 +163,19 @@ class DIOPTRelease:
         Returns an np.array of the Entrez IDs. If the full pd.DataFrame is desired, use the gprofiler library directly.
         """
         organism = self.input_species.latin_name.split(" ")
-        organism = organism[0][0] + organism[1]
+        organism = (organism[0][0] + organism[1]).lower()
 
-        result = self.gp.convert(
+        result = self._gp.convert(
             organism=organism.lower(),
-            query=np.array(genes).tolist(),
-            target_namespace="ENTREZGENE_ACC",
+            query=list(np.array(genes).tolist()),
+            target_namespace=(
+                "ENTREZGENE_ACC" if organism != "dmelanogaster" else "ENTREZGENE"
+            ),
         )
 
         if result[result["converted"] == "None"].shape[0]:
             print(
-                f'The following queries returned None when trying to get Entrez Acc Number:\n{result[result["converted"] == "None"]["incoming"].tolist()}'
+                f'The following queries ({np.ceil(result[result["converted"] == "None"].shape[0] / len(genes) * 100)}%) returned None when trying to get Entrez Acc Number:\n{result[result["converted"] == "None"]["incoming"].tolist()}'
             )
 
         return result[result["converted"] != "None"]["converted"].to_numpy()

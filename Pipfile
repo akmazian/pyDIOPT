@@ -10,6 +10,7 @@ twine = "*"
 pandas = "*"
 aiohttp = "*"
 gprofiler-official = "*"
+nest-asyncio = "*"
 
 [dev-packages]
 "flake8" = "*"
