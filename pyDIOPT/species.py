@@ -21,7 +21,8 @@ class Species:
     ncbi_taxonomy_id_map: dict[int, "Species"] = {}
 
     @staticmethod
-    def Register(species: "Species") -> None:
+    def _register(species: "Species") -> None:
+        """Intended for internal use only. Registers a species"""
         Species.latin_name_map[species.latin_name] = species
         if species.common_name:
             if type(species.common_name) == list:
@@ -38,6 +39,10 @@ class Species:
         search_query: Union["Species", str, int], error: bool = False
     ) -> "Species":
         """
+        Returns the appropriate species object based on search query.
+
+        A species object can also be passed in and the registered copy will be returned.
+
         Parameters:
             search_query: str | int | Species - any input that points to a species
             error: bool - whether to throw error if unable to parse species from search_query
@@ -67,7 +72,7 @@ class Species:
             search_string = search_string.capitalize()
 
             if search_string in Species.latin_name_map:
-                return Species.common_name_map[search_string]
+                return Species.latin_name_map[search_string]
 
             # try matching abbreviated latin names
             species_query = search_string.split(" ")[-1]
@@ -88,15 +93,15 @@ class Species:
             print(f"{ncbi_taxnomoy_id}\t{species.latin_name}")
 
 
-Species.Register(Species("Escherichia coli", common_name=None, ncbi_taxonomy_id=83333))
-Species.Register(Species("Arabidopsis thaliana", ["thale cress", "cress"], 3702))
-Species.Register(Species("Schizosaccharomyces pombe", "fission yeast", 4896))
-Species.Register(Species("Saccharomyces cerevisiae", ["budding yeast", "yeast"], 4932))
-Species.Register(Species("Caenorhabditis elegans", ["worm", "nematode"], 6239))
-Species.Register(Species("Anopheles gambiae", "mosquito", 7165))
-Species.Register(Species("Drosophila melanogaster", ["fly", "fruit fly"], 7227))
-Species.Register(Species("Danio rerio", "zebrafish", 7955))
-Species.Register(Species("Xenopus tropicalis", "western clawed frog", 8364))
-Species.Register(Species("Rattus norvegicus", ["rat", "brown rat"], 10116))
-Species.Register(Species("Mus musculus", "mouse", 10090))
-Species.Register(Species("Homo sapiens", "human", 9606))
+Species._register(Species("Escherichia coli", common_name=None, ncbi_taxonomy_id=83333))
+Species._register(Species("Arabidopsis thaliana", ["thale cress", "cress"], 3702))
+Species._register(Species("Schizosaccharomyces pombe", "fission yeast", 4896))
+Species._register(Species("Saccharomyces cerevisiae", ["budding yeast", "yeast"], 4932))
+Species._register(Species("Caenorhabditis elegans", ["worm", "nematode"], 6239))
+Species._register(Species("Anopheles gambiae", "mosquito", 7165))
+Species._register(Species("Drosophila melanogaster", ["fly", "fruit fly"], 7227))
+Species._register(Species("Danio rerio", "zebrafish", 7955))
+Species._register(Species("Xenopus tropicalis", "western clawed frog", 8364))
+Species._register(Species("Rattus norvegicus", ["rat", "brown rat"], 10116))
+Species._register(Species("Mus musculus", "mouse", 10090))
+Species._register(Species("Homo sapiens", "human", 9606))

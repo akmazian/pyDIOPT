@@ -19,16 +19,16 @@ class DIOPTRelease:
     Util class for fetching orthologs.
     """
 
-    gp = GProfiler(return_dataframe=True)
+    _gp = GProfiler(return_dataframe=True)
 
     def __init__(
         self, version: Literal["v8", "v9"] = "v8", input_species: str | int = "human"
     ) -> None:
         if version not in ["v8", "v9"]:
             if version in [8, 9]:
-                self.version = "v" + version
+                self.version = f"v{version}"
             else:
-                raise TypeError("The")
+                raise TypeError("The version annot be parsed. Please indicate whether v8 or v9 is to be used")
         else:
             if version == "v9":
                 print(
@@ -36,9 +36,9 @@ class DIOPTRelease:
                 )
             self.version = version
 
-        self.input_species = Species.parse_species(input_species)
-
-        if not self.input_species:
+        try:
+            self.input_species = Species.parse_species(input_species, error=True)
+        except:
             raise ValueError(
                 "The input species cannot be parsed. Refer to pyDIOPT.Species.available() for a complete list of supported species."
             )
@@ -165,7 +165,7 @@ class DIOPTRelease:
         organism = self.input_species.latin_name.split(" ")
         organism = (organism[0][0] + organism[1]).lower()
 
-        result = self.gp.convert(
+        result = self._gp.convert(
             organism=organism.lower(),
             query=list(np.array(genes).tolist()),
             target_namespace=(
