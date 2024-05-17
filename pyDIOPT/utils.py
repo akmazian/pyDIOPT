@@ -26,7 +26,7 @@ Yanhui Hu, Aram Comjean, Jonathan Rodiger, Yifang Liu, Yue Gao, Verena Chung, Jo
 
 def help() -> None:
     print("The documentations for pyDIOPT can be found at:")
-    print("*not quite ready yet*")
+    print("[pyDIOT](https://github.com/akmazian/pyDIOPT)")
     print()
     print("The documentations for DIOPT can be found at:")
     print("[DIOPT](https://fgr.hms.harvard.edu/diopt-documentation)")
